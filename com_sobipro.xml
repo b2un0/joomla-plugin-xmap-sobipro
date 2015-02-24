@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<extension type="plugin" group="xmap" version="1.6" method="upgrade">
-    <name>Xmap - SobiPro Plugin</name>
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="xmap" method="upgrade">
+    <name>Xmap - SobiPro Integration</name>
     <author>Guillermo Vargas</author>
     <creationDate>07/15/2011</creationDate>
     <copyright>GNU GPL</copyright>
-    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorEmail>guille@vargas.co.cr</authorEmail>
     <authorUrl>joomla.vargas.co.cr</authorUrl>
-    <version>2.0.2</version>
+    <version>@REVISION@</version>
     <description>Xmap Plugin for SobiPro component</description>
     <files>
         <filename plugin="com_sobipro">com_sobipro.php</filename>
     </files>
     <languages folder="language">
-        <!--
-        these files will be installed in the administrator/language folder.
-        -->
-        <language tag="en-GB">en-GB.plg_xmap_com_sobipro.ini</language>
-        <language tag="es-ES">es-ES.plg_xmap_com_sobipro.ini</language>
-        <language tag="fa-IR">fa-IR.plg_xmap_com_sobipro.ini</language>
-        <language tag="cs-CZ">cs-CZ.plg_xmap_com_sobipro.ini</language>
-        <language tag="nl-NL">nl-NL.plg_xmap_com_sobipro.ini</language>
-        <language tag="ru-RU">ru-RU.plg_xmap_com_sobipro.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_xmap_com_sobipro.ini</language>
+        <language tag="es-ES">es-ES/es-ES.plg_xmap_com_sobipro.ini</language>
+        <language tag="fa-IR">fa-IR/fa-IR.plg_xmap_com_sobipro.ini</language>
+        <language tag="cs-CZ">cs-CZ/cs-CZ.plg_xmap_com_sobipro.ini</language>
+        <language tag="nl-NL">nl-NL/nl-NL.plg_xmap_com_sobipro.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.plg_xmap_com_sobipro.ini</language>
     </languages>
+    <updateservers>
+        <server type="collection" priority="1" name="z-index development">http://www.z-index.net/en/extensions.xml</server>
+    </updateservers>
     <config>
         <fields name="params">
             <fieldset name="basic">
