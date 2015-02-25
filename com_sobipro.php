@@ -11,11 +11,11 @@ defined('_JEXEC') or die;
 
 class xmap_com_sobipro
 {
+    public static $sectionConfig = array();
 
-    static $sectionConfig = array();
-
-    function prepareMenuItem($node, &$params)
+    public static function prepareMenuItem($node, &$params)
     {
+        // TODO new JUri
         $link_query = parse_url($node->link);
         parse_str(html_entity_decode($link_query['query']), $link_vars);
         $sid = JArrayHelper::getValue($link_vars, 'sid', 0);
@@ -33,9 +33,8 @@ class xmap_com_sobipro
     }
 
     /** Get the content tree for this kind of content */
-    function getTree($xmap, $parent, &$params)
+    public static function getTree($xmap, $parent, &$params)
     {
-
         if ($xmap->isNews) // This component does not provide news content. don't waste time/resources
             return false;
 
@@ -43,7 +42,7 @@ class xmap_com_sobipro
             return;
         }
 
-        // TODO JUri
+        // TODO new JUri
         $link_query = parse_url($parent->link);
         parse_str(html_entity_decode($link_query['query']), $link_vars);
         $sid = JArrayHelper::getValue($link_vars, 'sid', 1);
@@ -121,11 +120,11 @@ class xmap_com_sobipro
                 $params['days'] = ' AND a.publish_up >=\'' . strftime("%Y-%m-%d %H:%M:%S", $xmap->now - ($days * 86400)) . "' ";
         }
 
-        xmap_com_sobipro::getCategoryTree($xmap, $parent, $sid, $params);
+        self::getCategoryTree($xmap, $parent, $sid, $params);
     }
 
     /** SobiPro support */
-    function getCategoryTree($xmap, $parent, $sid, &$params)
+    public static function getCategoryTree($xmap, $parent, $sid, &$params)
     {
         $database =& JFactory::getDBO();
 
@@ -159,7 +158,7 @@ class xmap_com_sobipro
             $node->expandible = true;
             $node->secure = $parent->secure;
             if ($xmap->printNode($node) !== FALSE) {
-                xmap_com_sobipro::getCategoryTree($xmap, $parent, $row->id, $params);
+                self::getCategoryTree($xmap, $parent, $row->id, $params);
             }
         }
 
@@ -202,14 +201,14 @@ class xmap_com_sobipro
         $xmap->changeLevel(-1);
     }
 
-    static protected function getSectionConfig($sectionId)
+    protected static function getSectionConfig($sectionId)
     {
         $db = JFactory::getDbo();
         $db->setQuery('SELECT * FROM `#__sobipro_config` where section=' . (int)$sectionId);
         return $db->loadObjectList('sKey');
     }
 
-    static protected function loadSobi()
+    protected static function loadSobi()
     {
         if (defined('SOBI_TESTS')) {
             return true;
@@ -246,7 +245,7 @@ class xmap_com_sobipro
         return true;
     }
 
-    static protected function findCategorySection($sid)
+    protected static function findCategorySection($sid)
     {
         $db = JFactory::getDbo();
         $db->setQuery('SELECT id,parent,oType FROM `#__sobipro_object` where id=' . (int)$sid);
