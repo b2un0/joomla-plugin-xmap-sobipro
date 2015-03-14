@@ -1,10 +1,12 @@
 <?php
 
 /**
- * @author     Guillermo Vargas <guille@vargas.co.cr>
- * @author     Branko Wilhelm <branko.wilhelm@gmail.com>
- * @link       http://www.z-index.net
- * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ * @author      Guillermo Vargas <guille@vargas.co.cr>
+ * @author      Branko Wilhelm <branko.wilhelm@gmail.com>
+ * @link        http://www.z-index.net
+ * @copyright   (c) 2005 - 2009 Joomla! Vargas. All rights reserved.
+ * @copyright   (c) 2015 Branko Wilhelm. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;
@@ -25,9 +27,11 @@ class xmap_com_sobipro
         $row = $db->loadObject();
 
         $node->uid = 'com_sobiproo' . $sid;
-        if ($row->oType == 'section' || $row->oType == 'category') {
+        if ($row->oType == 'section' || $row->oType == 'category')
+        {
             $node->expandible = true;
-        } else {
+        } else
+        {
             $node->expandible = false;
         }
     }
@@ -38,7 +42,8 @@ class xmap_com_sobipro
         if ($xmap->isNews) // This component does not provide news content. don't waste time/resources
             return false;
 
-        if (!self::loadSobi()) {
+        if (!self::loadSobi())
+        {
             return;
         }
 
@@ -48,7 +53,8 @@ class xmap_com_sobipro
         $sid = JArrayHelper::getValue($link_vars, 'sid', 1);
         $task = JArrayHelper::getValue($link_vars, 'task', null);
 
-        if (in_array($task, array('search', 'entry.add'))) {
+        if (in_array($task, array('search', 'entry.add')))
+        {
             return;
         }
 
@@ -56,11 +62,14 @@ class xmap_com_sobipro
         $db->setQuery('SELECT * FROM `#__sobipro_object` where id=' . (int)$sid);
         $object = $db->loadObject();
 
-        if ($object->oType == 'entry') {
+        if ($object->oType == 'entry')
+        {
             return;
-        } elseif ($object->oType == 'category') {
+        } elseif ($object->oType == 'category')
+        {
             $sectionId = self::findCategorySection($object->parent);
-        } else {
+        } else
+        {
             $sectionId = $sid;
         }
         self::$sectionConfig = self::getSectionConfig($sectionId);
@@ -98,13 +107,16 @@ class xmap_com_sobipro
         $date = JFactory::getDate();
         $params['now'] = $date->toSql();
 
-        if ($include_entries) {
+        if ($include_entries)
+        {
             $ordering = JArrayHelper::getValue($params, 'entries_order', 'b.position');
             $orderdir = JArrayHelper::getValue($params, 'entries_orderdir', 'ASC');
-            if (!in_array($ordering, array('b.position', 'a.counter', 'b.validSince', 'a.updatedTime'))) {
+            if (!in_array($ordering, array('b.position', 'a.counter', 'b.validSince', 'a.updatedTime')))
+            {
                 $ordering = 'b.position';
             }
-            if (!in_array($orderdir, array('ASC', 'DESC'))) {
+            if (!in_array($orderdir, array('ASC', 'DESC')))
+            {
                 $orderdir = 'ASC';
             }
             $params['ordering'] = $ordering . ' ' . $orderdir;
@@ -144,7 +156,8 @@ class xmap_com_sobipro
 
         $modified = time();
         $xmap->changeLevel(1);
-        foreach ($rows as $row) {
+        foreach ($rows as $row)
+        {
             $node = new stdclass;
             $node->id = $parent->id;
             $node->uid = 'com_sobiproc' . $row->id; // Unique ID
@@ -157,12 +170,14 @@ class xmap_com_sobipro
             $node->changefreq = $params['cat_changefreq'];
             $node->expandible = true;
             $node->secure = $parent->secure;
-            if ($xmap->printNode($node) !== FALSE) {
+            if ($xmap->printNode($node) !== false)
+            {
                 self::getCategoryTree($xmap, $parent, $row->id, $params);
             }
         }
 
-        if ($params['include_entries']) {
+        if ($params['include_entries'])
+        {
             $query =
                 "SELECT a.id, c.baseData as name,a.updatedTime as modified,b.validSince as publish_up, b.pid as catid  "
                 . "\n FROM #__sobipro_object AS a, #__sobipro_relations AS b, #__sobipro_field_data c"
@@ -181,7 +196,8 @@ class xmap_com_sobipro
 
             $database->setQuery($query);
             $rows = $database->loadObjectList();
-            foreach ($rows as $row) {
+            foreach ($rows as $row)
+            {
                 $node = new stdclass;
                 $node->id = $parent->id;
                 $node->uid = 'com_sobiproe' . $row->id; // Unique ID
@@ -205,19 +221,22 @@ class xmap_com_sobipro
     {
         $db = JFactory::getDbo();
         $db->setQuery('SELECT * FROM `#__sobipro_config` where section=' . (int)$sectionId);
+
         return $db->loadObjectList('sKey');
     }
 
     protected static function loadSobi()
     {
-        if (defined('SOBI_TESTS')) {
+        if (defined('SOBI_TESTS'))
+        {
             return true;
         }
         define('SOBI_TESTS', false);
         $ver = new JVersion();
         $ver = str_replace('.', null, $ver->RELEASE);
         // added by Pierre Burri-Wittke globeall.de
-        if ($ver > '15') {
+        if ($ver > '15')
+        {
             $ver = '16';
         }
         define('SOBI_CMS', 'joomla' . $ver);
@@ -229,7 +248,8 @@ class xmap_com_sobipro
         define('SOBI_MEDIA', implode('/', array(JPATH_ROOT, 'media', 'sobipro')));
         define('SOBI_MEDIA_LIVE', JURI::root() . '/media/sobipro');
         define('SOBI_PATH', SOBI_ROOT . '/components/com_sobipro');
-        if (!file_exists(SOBI_PATH . '/lib/base/fs/loader.php')) {
+        if (!file_exists(SOBI_PATH . '/lib/base/fs/loader.php'))
+        {
             return false;
         }
         require_once SOBI_PATH . '/lib/base/fs/loader.php';
@@ -242,6 +262,7 @@ class xmap_com_sobipro
         SPLoader::loadClass('base.const');
         SPLoader::loadClass('cms.base.mainframe');
         SPLoader::loadClass('cms.base.lang');
+
         return true;
     }
 
@@ -250,9 +271,11 @@ class xmap_com_sobipro
         $db = JFactory::getDbo();
         $db->setQuery('SELECT id,parent,oType FROM `#__sobipro_object` where id=' . (int)$sid);
         $row = $db->loadObject();
-        if ($row->oType == 'section') {
+        if ($row->oType == 'section')
+        {
             return $row->id;
-        } else {
+        } else
+        {
             return self::findCategorySection($row->parent);
         }
     }
